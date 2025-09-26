@@ -7,7 +7,6 @@ import { EditorView } from "prosemirror-view";
 import "prosemirror-view/style/prosemirror.css";
 import React from "react";
 import { Editor } from "./Editor";
-import { StreamingSkeleton } from "./StreamingSkeleton";
 import { Toolbar } from "./Toolbar";
 import { Button } from "./ui/button";
 

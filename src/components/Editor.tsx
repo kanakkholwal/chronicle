@@ -107,7 +107,7 @@ export const Editor: React.FC<EditorProps> = ({ content, onChange, isLoading, pl
     }
   }, [content, onError]);
 
-  if (isLoading) return <div className="min-h-[200px] p-4 rounded-md bg-muted/50" />;
+  if (isLoading) return <div className="min-h-[200px] rounded-md bg-muted/50" />;
 
   return <div ref={editorRef} className="relative w-full" />;
 };
