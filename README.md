@@ -1,73 +1,62 @@
-# React + TypeScript + Vite
+# Chronicle: AI Editor - Assessment Submission
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Task
 
-Currently, two official plugins are available:
+Chronicle is a simple AI-powered writing assistant web app. It helps users write stories or text, and can automatically continue your writing using AI-generated suggestions (mock api).
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Features
 
-## React Compiler
+- **Rich Text Editor**: Bold, italic, underline, lists, and more (powered by ProseMirror).
+- **AI Writing Assistant**: Click 'Continue Writing' to let AI generate the next part of your story.
+- **Error Handling**: Friendly error messages and easy recovery.
+- **Responsive UI**: Works well on desktop and mobile.
+- **Modern Design**: Styled with Tailwind CSS and Framer Motion for smooth animations.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Setup Instructions
 
-## Expanding the ESLint configuration
+1. **Install dependencies**:
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+   ```powershell
+   npm install
+   ```
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+2. **Start development server**:
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+   ```powershell
+   npm run dev
+   ```
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+   The app will run at [http://localhost:3000](http://localhost:3000)
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+3. **Build for production**:
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+   ```powershell
+   npm run build
+   ```
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+4. **Preview production build**:
+
+   ```powershell
+   npm run preview
+   ```
+
+## Usage
+
+- Start typing in the editor. Use the toolbar for formatting (bold, italic, underline).
+- Click 'Continue Writing' to let the AI generate more text based on your input.
+- If an error occurs, use the provided buttons to retry or refresh.
+
+## Technical Discussion
+
+- **Frontend**: React + TypeScript, Vite for fast builds.
+- **Editor**: ProseMirror with custom schema for underline and lists.
+- **AI Simulation**: Uses a mock streaming generator (see `src/machines/editorMachine.ts`).
+- **State Management**: XState for editor state and AI streaming.
+- **Styling**: Tailwind CSS
+- **Error Handling**: Custom error types and boundaries for robust UX.
+
+## Assessment Notes
+
+- Code is modular and readable, with clear separation of concerns.
+- Demonstrates knowledge of modern React, state machines, and editor frameworks.
+- Easy to extend for real AI integration or more formatting options.
