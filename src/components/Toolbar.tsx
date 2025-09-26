@@ -1,24 +1,20 @@
-import React from 'react';
-import { EditorView } from 'prosemirror-view';
-import { EditorState } from 'prosemirror-state';
-import { toggleMark, setBlockType } from 'prosemirror-commands';
-import { wrapInList } from 'prosemirror-schema-list';
-import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
-import { 
-  Bold, 
-  Italic, 
-  Underline, 
-  Heading1, 
-  Heading2, 
-  List, 
-  ListOrdered 
+import {
+  Bold,
+  Italic,
+  Sparkles,
+  Underline
 } from 'lucide-react';
+import { toggleMark } from 'prosemirror-commands';
+import { EditorState } from 'prosemirror-state';
+import { EditorView } from 'prosemirror-view';
+import React from 'react';
 
 interface ToolbarProps {
   editorView: EditorView | null;
   className?: string;
+  aiStreaming:boolean
 }
 
 interface ToolbarButtonProps {
@@ -37,31 +33,21 @@ const ToolbarButton: React.FC<ToolbarButtonProps> = ({
   title 
 }) => {
   return (
-    <motion.div
-      whileHover={{ scale: 1.05 }}
-      whileTap={{ scale: 0.98 }}
-      transition={{ type: "spring", stiffness: 400, damping: 25 }}
-    >
+    
       <Button
-        variant="outline"
-        size="sm"
+        variant={isActive ? 'default_light' : "secondary"}
+        size="icon_sm"
         onClick={onClick}
         disabled={disabled}
+        transition="none"
         title={title}
-        className={cn(
-          'h-8 w-8 p-0 transition-all duration-200',
-          'hover:bg-accent hover:text-accent-foreground',
-          'focus-visible:ring-2 focus-visible:ring-ring',
-          isActive && 'bg-primary text-primary-foreground hover:bg-primary/90'
-        )}
       >
         {children}
       </Button>
-    </motion.div>
   );
 };
 
-export const Toolbar: React.FC<ToolbarProps> = ({ editorView, className }) => {
+export const Toolbar: React.FC<ToolbarProps> = ({ editorView, className,aiStreaming }) => {
   const [editorState, setEditorState] = React.useState<EditorState | null>(null);
 
   // Update editor state when view changes
@@ -124,16 +110,7 @@ export const Toolbar: React.FC<ToolbarProps> = ({ editorView, className }) => {
     return editorState.doc.rangeHasMark(from, to, markType);
   };
 
-  // Helper function to check if a block type is active
-  const isBlockActive = (nodeType: any) => {
-    if (!nodeType || !editorState || !selection) return false;
-    
-    const { $from, to, node } = selection;
-    if (node) {
-      return node.type === nodeType;
-    }
-    return to <= $from.end() && $from.parent.type === nodeType;
-  };
+
 
   // Command handlers
   const toggleBold = () => {
@@ -163,45 +140,12 @@ export const Toolbar: React.FC<ToolbarProps> = ({ editorView, className }) => {
     }
   };
 
-  const setHeading1 = () => {
-    if (!schema.nodes.heading || !editorState || !editorView) return;
-    const command = setBlockType(schema.nodes.heading, { level: 1 });
-    if (command(editorState)) {
-      command(editorState, editorView.dispatch);
-      editorView.focus();
-    }
-  };
 
-  const setHeading2 = () => {
-    if (!schema.nodes.heading || !editorState || !editorView) return;
-    const command = setBlockType(schema.nodes.heading, { level: 2 });
-    if (command(editorState)) {
-      command(editorState, editorView.dispatch);
-      editorView.focus();
-    }
-  };
 
-  const toggleBulletList = () => {
-    if (!schema.nodes.bullet_list || !editorState || !editorView) return;
-    const command = wrapInList(schema.nodes.bullet_list);
-    if (command(editorState)) {
-      command(editorState, editorView.dispatch);
-      editorView.focus();
-    }
-  };
-
-  const toggleOrderedList = () => {
-    if (!schema.nodes.ordered_list || !editorState || !editorView) return;
-    const command = wrapInList(schema.nodes.ordered_list);
-    if (command(editorState)) {
-      command(editorState, editorView.dispatch);
-      editorView.focus();
-    }
-  };
 
   return (
     <div className={cn(
-      'flex items-center gap-1 p-2 border-b border-border bg-muted/30',
+      'flex items-center gap-1 p-2 border-b border-border bg-card rounded-lg',
       className
     )}>
       <ToolbarButton
@@ -227,42 +171,12 @@ export const Toolbar: React.FC<ToolbarProps> = ({ editorView, className }) => {
       >
         <Underline className="h-4 w-4" />
       </ToolbarButton>
-
-      <div className="w-px h-6 bg-border mx-1" />
-
-      <ToolbarButton
-        onClick={setHeading1}
-        isActive={schema.nodes.heading ? (isBlockActive(schema.nodes.heading) && selection.$from?.parent?.attrs?.level === 1) : false}
-        title="Heading 1"
-      >
-        <Heading1 className="h-4 w-4" />
-      </ToolbarButton>
-
-      <ToolbarButton
-        onClick={setHeading2}
-        isActive={schema.nodes.heading ? (isBlockActive(schema.nodes.heading) && selection.$from?.parent?.attrs?.level === 2) : false}
-        title="Heading 2"
-      >
-        <Heading2 className="h-4 w-4" />
-      </ToolbarButton>
-
-      <div className="w-px h-6 bg-border mx-1" />
-
-      <ToolbarButton
-        onClick={toggleBulletList}
-        isActive={schema.nodes.bullet_list ? isBlockActive(schema.nodes.bullet_list) : false}
-        title="Bullet List"
-      >
-        <List className="h-4 w-4" />
-      </ToolbarButton>
-
-      <ToolbarButton
-        onClick={toggleOrderedList}
-        isActive={schema.nodes.ordered_list ? isBlockActive(schema.nodes.ordered_list) : false}
-        title="Ordered List"
-      >
-        <ListOrdered className="h-4 w-4" />
-      </ToolbarButton>
+      <div className='h-full w-1 bg-border'/>
+        {aiStreaming && <div className='flex items-center ml-auto gap-2'>
+          <Sparkles className='size-3 text-primary animate-spin'/>
+          <span className="text-xs text-primary font-medium">AI Generating...</span>
+        </div>}
+  
     </div>
   );
 };

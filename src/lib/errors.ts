@@ -2,7 +2,7 @@
 
 export const ErrorType = {
   EDITOR_INITIALIZATION: 'EDITOR_INITIALIZATION',
-  EDITOR_UPDATE: 'EDITOR_UPDATE', 
+  EDITOR_UPDATE: 'EDITOR_UPDATE',
   AI_GENERATION: 'AI_GENERATION',
   AI_TIMEOUT: 'AI_TIMEOUT',
   ANIMATION: 'ANIMATION',
@@ -37,7 +37,7 @@ export class EditorError extends Error {
     this.type = type;
     this.timestamp = Date.now();
     this.context = context;
-    
+
     // Maintain proper stack trace
     if (originalError && originalError.stack) {
       this.stack = originalError.stack;
@@ -94,31 +94,31 @@ export const createAppError = (
 
 export const isNetworkError = (error: Error): boolean => {
   return error.message.toLowerCase().includes('network') ||
-         error.message.toLowerCase().includes('timeout') ||
-         error.message.toLowerCase().includes('fetch') ||
-         error.name === 'NetworkError';
+    error.message.toLowerCase().includes('timeout') ||
+    error.message.toLowerCase().includes('fetch') ||
+    error.name === 'NetworkError';
 };
 
 export const getErrorMessage = (error: unknown): string => {
   if (error instanceof EditorError) {
     return error.message;
   }
-  
+
   if (error instanceof Error) {
     return error.message;
   }
-  
+
   if (typeof error === 'string') {
     return error;
   }
-  
+
   return 'An unknown error occurred';
 };
 
 export const logError = (error: AppError | EditorError | Error, context?: string): void => {
   const timestamp = new Date().toISOString();
   const contextStr = context ? `[${context}]` : '';
-  
+
   if (error instanceof EditorError) {
     console.error(
       `${timestamp} ${contextStr} ${error.name}:`,
@@ -140,18 +140,18 @@ export const logError = (error: AppError | EditorError | Error, context?: string
 // Content validation utilities
 export const validateContent = (content: string): { isValid: boolean; errors: string[] } => {
   const errors: string[] = [];
-  
+
   // Check for extremely long content that might cause performance issues
   if (content.length > 50000) {
     errors.push('Content exceeds maximum length of 50,000 characters');
   }
-  
+
   // Check for potentially problematic characters
   const problematicChars = /[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g;
   if (problematicChars.test(content)) {
     errors.push('Content contains invalid control characters');
   }
-  
+
   return {
     isValid: errors.length === 0,
     errors
@@ -193,13 +193,13 @@ export const withRetry = async <T>(
   delayMs: number = 1000
 ): Promise<T> => {
   let lastError: Error;
-  
+
   for (let attempt = 1; attempt <= maxRetries; attempt++) {
     try {
       return await operation();
     } catch (error) {
       lastError = error instanceof Error ? error : new Error(String(error));
-      
+
       if (attempt === maxRetries) {
         throw new EditorError(
           ErrorType.UNKNOWN,
@@ -208,11 +208,11 @@ export const withRetry = async <T>(
           { attempts: maxRetries, delayMs }
         );
       }
-      
+
       // Wait before retrying
       await new Promise(resolve => setTimeout(resolve, delayMs * attempt));
     }
   }
-  
+
   throw lastError!;
 };

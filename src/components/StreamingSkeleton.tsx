@@ -1,7 +1,7 @@
-import React from 'react';
-import { motion } from 'framer-motion';
 import { Skeleton } from '@/components/ui/skeleton';
 import { cn } from '@/lib/utils';
+import { motion } from 'framer-motion';
+import React from 'react';
 
 interface StreamingSkeletonProps {
   className?: string;
@@ -14,7 +14,7 @@ export const StreamingSkeleton: React.FC<StreamingSkeletonProps> = ({ className 
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -10 }}
       transition={{ duration: 0.2 }}
-      className={cn('mt-4 p-4 rounded-md bg-muted/30 border border-dashed border-muted-foreground/30', className)}
+      className={cn('mt-4 p-4 rounded-md bg-card/80 border border-dashed border-muted-foreground/30', className)}
     >
       <div className="flex items-center gap-2 mb-3">
         <div className="w-2 h-2 bg-primary rounded-full animate-pulse" />

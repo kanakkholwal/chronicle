@@ -9,15 +9,21 @@ const underlineMark = {
     { style: 'text-decoration=underline' }
   ],
   toDOM() {
-    return ['u', 0];
+    return ['u', 0] as const;
   }
 };
+
+// Convert OrderedMap to plain object and remove 'size'
+const basicMarksObj: Record<string, any> = {};
+basicSchema.spec.marks.forEach((markName: string, markSpec: any) => {
+  if (markName !== "size") basicMarksObj[markName] = markSpec;
+});
 
 // Extend the basic schema with underline and list support
 export const richTextSchema = new Schema({
   nodes: addListNodes(basicSchema.spec.nodes, "paragraph block*", "block"),
   marks: {
-    ...basicSchema.spec.marks,
+    ...basicMarksObj,
     underline: underlineMark
   }
 });

@@ -1,6 +1,6 @@
+import { EditorCard } from '@/components/EditorCard';
 import React from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
-import { SimpleEditorCard } from '@/components/SimpleEditorCard';
 
 // Error fallback component for application-level errors
 const ErrorFallback: React.FC<{ error: Error; resetErrorBoundary: () => void }> = ({
@@ -82,11 +82,16 @@ const App: React.FC = () => {
       }}
     >
       <div className="min-h-screen bg-background will-change-[background-color]">
-        {/* Main content area with proper responsive layout and performance optimizations */}
-        <main className="container mx-auto px-4 py-8 flex items-center justify-center min-h-screen">
-          <div className="w-full flex justify-center">
-            <SimpleEditorCard className="w-full" />
+        <main className="container mx-auto px-4 py-8 flex items-center justify-center flex-col min-h-screen max-w-4xl gap-5">
+          <div className="text-center"> 
+            <h1 className="text-2xl font-semibold text-foreground">
+              AI Writing Assistant
+            </h1>
+            <p className="text-sm text-muted-foreground mt-1">
+              Start writing and let AI help you continue your story
+            </p>
           </div>
+          <EditorCard className="w-full" />
         </main>
       </div>
     </ErrorBoundary>
